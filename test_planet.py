@@ -8,10 +8,25 @@ def test_earth_mass():
     planet = Planet(SUN)
     planet.mass = 1.0
     assert planet.earth_mass() == 332775.64
+    planet.mass = planet.earth_in_solar_masses
+    assert planet.earth_mass() == 1.0
 
 
-def test_density():
-    assert Planet(SUN).density() is None
+def test_regular_density():
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    assert planet.density() == 5.5
+    planet.mass *= 2.0
+    assert round(planet.density(), 2) == 6.0
+
+
+def test_gas_giant_density():
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    planet.gas_giant = True
+    assert planet.density() == 1.2
+    planet.mass *= 2.0
+    assert round(planet.density(), 2) == 1.31
 
 
 def test_radius():

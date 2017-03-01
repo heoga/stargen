@@ -2,7 +2,7 @@ class Planet(object):
     earth_in_solar_masses = 1.0 / 332775.64
 
     def __init__(self, star):
-        self.mass = 1.0
+        self.mass = 1.0  # Solar masses
         self.axis = 1.0
         self.gas_giant = False
         self.star = star
@@ -11,7 +11,12 @@ class Planet(object):
         return self.mass / self.earth_in_solar_masses
 
     def density(self):
-        pass
+        factor = 1.2 if self.gas_giant else 5.5
+        return factor * (
+            self.earth_mass() ** (1.0 / 8.0)
+        ) * (
+            (self.star.ecosphere_radius() / self.axis) ** (1.0 / 4.0)
+        )
 
     def radius(self):
         pass
