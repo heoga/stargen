@@ -4,6 +4,12 @@ from star import Star
 SUN = Star(1.0)
 
 
+def test_earth_mass():
+    planet = Planet(SUN)
+    planet.mass = 1.0
+    assert planet.earth_mass() == 332775.64
+
+
 def test_density():
     assert Planet(SUN).density() is None
 

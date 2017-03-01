@@ -1,9 +1,14 @@
 class Planet(object):
+    earth_in_solar_masses = 1.0 / 332775.64
+
     def __init__(self, star):
         self.mass = 1.0
         self.axis = 1.0
         self.gas_giant = False
         self.star = star
+
+    def earth_mass(self):
+        return self.mass / self.earth_in_solar_masses
 
     def density(self):
         pass
