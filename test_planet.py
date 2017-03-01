@@ -30,7 +30,9 @@ def test_gas_giant_density():
 
 
 def test_radius():
-    assert Planet(SUN).radius() is None
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    assert round(planet.radius(), 2) == 6377.89
 
 
 def test_orbital_period():

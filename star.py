@@ -4,6 +4,7 @@ import math
 
 class Star(object):
     greenhouse_factor = 0.93
+    solar_mass_in_grams = 1.989e33
 
     def __init__(self, mass_ratio=None):
         if mass_ratio:

@@ -1,3 +1,8 @@
+import math
+
+CM_PER_KM = 1.0e5
+
+
 class Planet(object):
     earth_in_solar_masses = 1.0 / 332775.64
 
@@ -19,7 +24,9 @@ class Planet(object):
         )
 
     def radius(self):
-        pass
+        grams = self.mass * self.star.solar_mass_in_grams
+        volume = grams / self.density()
+        return (((3.0 / (math.pi * 4.0)) * volume) ** (1.0 / 3.0) / CM_PER_KM)
 
     def orbital_period(self):
         pass
