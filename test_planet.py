@@ -58,7 +58,11 @@ def test_orbital_period():
 
 
 def test_day():
-    assert Planet(SUN).day() is None
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    planet.axis = 1
+    planet.star.specified_age = 4.6e9
+    assert round(planet.day(), 2) == 16.21
 
 
 def test_resonant_period():

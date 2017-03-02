@@ -6,11 +6,12 @@ class Star(object):
     greenhouse_factor = 0.93
     solar_mass_in_grams = 1.989e33
 
-    def __init__(self, mass_ratio=None):
+    def __init__(self, mass_ratio=None, age=None):
         if mass_ratio:
             self.mass_ratio = mass_ratio
         else:
             self.mass_ratio = random.uniform(0.6, 1.3)
+        self.specified_age = age
 
     def luminosity_ratio(self):
         if self.mass_ratio < 0.43:
@@ -32,7 +33,9 @@ class Star(object):
     def maximum_star_age(self):
         return min(self.main_sequence_life(), 6.0E9)
 
-    def star_age(self):
+    def age(self):
+        if self.specified_age is not None:
+            return self.specified_age
         return random.uniform(1.0E9, self.maximum_star_age())
 
     def ecosphere_radius(self):

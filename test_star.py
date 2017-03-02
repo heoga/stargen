@@ -43,7 +43,7 @@ def test_maximum_star_age():
 def test_star_age():
     ages = set()
     for i in range(0, 100):
-        ages.add(Star().star_age())
+        ages.add(Star().age())
     assert len(ages) > 1
     assert min(ages) >= 1.0E9
     assert max(ages) <= 6.0E9
