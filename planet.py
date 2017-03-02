@@ -72,7 +72,10 @@ class Planet(object):
         return self.kothari_radius()
 
     def orbital_period(self):
-        pass
+        return (
+            365.256 * math.sqrt(self.axis ** 3) /
+            (self.mass + self.star.mass_ratio)
+        )
 
     def day(self):
         pass

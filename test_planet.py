@@ -49,7 +49,12 @@ def test_radius():
 
 
 def test_orbital_period():
-    assert Planet(SUN).orbital_period() is None
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    planet.axis = 1
+    assert round(planet.orbital_period(), 2) == 365.25
+    planet.axis = 5.2
+    assert round(planet.orbital_period(), 2) == 4331.13
 
 
 def test_day():
