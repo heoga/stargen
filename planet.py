@@ -2,6 +2,7 @@ import math
 import random
 
 CM_PER_KM = 1.0e5
+GRAV_CONSTANT = 6.672E-8
 
 
 def about(value, variation):
@@ -160,7 +161,10 @@ class Planet(object):
         return self.tilt
 
     def escape_velocity(self):
-        pass
+        """Returns in cm/sec."""
+        mass_in_grams = self.mass * self.star.solar_mass_in_grams
+        radius_in_cm = self.radius() * CM_PER_KM
+        return math.sqrt(2.0 * GRAV_CONSTANT * mass_in_grams / radius_in_cm)
 
     def surface_acceleration(self):
         pass

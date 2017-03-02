@@ -82,7 +82,11 @@ def test_axial_tilt():
 
 
 def test_escape_velocity():
-    assert Planet(SUN).escape_velocity() is None
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    assert round(planet.escape_velocity(), -3) == 1116000
+    planet.mass = planet.earth_in_solar_masses * 0.107
+    assert round(planet.escape_velocity(), -3) == 527000
 
 
 def test_surface_acceleration():
