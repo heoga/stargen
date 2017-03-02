@@ -4,6 +4,15 @@ from star import Star
 SUN = Star(1.0)
 
 
+def test_orbit_zone():
+    planet = Planet(SUN)
+    assert planet.orbit_zone() == 1
+    planet.axis = 4
+    assert planet.orbit_zone() == 2
+    planet.axis = 22
+    assert planet.orbit_zone() == 3
+
+
 def test_earth_mass():
     planet = Planet(SUN)
     planet.mass = 1.0

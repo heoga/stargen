@@ -38,5 +38,11 @@ class Star(object):
     def ecosphere_radius(self):
         return math.sqrt(self.luminosity_ratio())
 
+    def frost_line(self):
+        return 4 * self.ecosphere_radius()
+
+    def gas_line(self):
+        return 15 * self.ecosphere_radius()
+
     def greenhouse_radius(self):
         return self.ecosphere_radius() * self.greenhouse_factor

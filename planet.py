@@ -12,6 +12,16 @@ class Planet(object):
         self.gas_giant = False
         self.star = star
 
+    def orbit_zone(self):
+        if self.axis < self.star.frost_line():
+            return 1
+        if (
+                (self.axis >= self.star.frost_line()) and
+                (self.axis < self.star.gas_line())
+        ):
+            return 2
+        return 3
+
     def earth_mass(self):
         return self.mass / self.earth_in_solar_masses
 
