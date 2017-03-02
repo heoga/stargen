@@ -1,6 +1,11 @@
 import math
+import random
 
 CM_PER_KM = 1.0e5
+
+
+def about(value, variation):
+    return value + (value * random.uniform(-variation, variation))
 
 
 class Planet(object):
@@ -8,13 +13,15 @@ class Planet(object):
     change_in_earth_angular_velocity = -1.3E-15  # rad/s
     earth_density = 5.52  # g/cc
     earth_radius = 6.378E8  # cm
+    earth_axial_tilt = 23.4
 
-    def __init__(self, star):
-        self.mass = 1.0  # Solar masses
-        self.axis = 1.0
-        self.gas_giant = False
+    def __init__(self, star, mass=1.0, axis=1.0, gas_giant=False, eccentricity=1.0, tilt=None):
+        self.mass = mass  # Solar masses
+        self.axis = axis
+        self.gas_giant = gas_giant
         self.star = star
-        self.eccentricity = 1.0
+        self.eccentricity = eccentricity
+        self.tilt = tilt
 
     def orbit_zone(self):
         if self.axis < self.star.frost_line():
@@ -95,6 +102,7 @@ class Planet(object):
         )
 
     def tidal_rotational_deceleration(self):
+        """Rotational deceleration due to tidal forces from the star."""
         return (
             self.change_in_earth_angular_velocity *
             (self.density() / self.earth_density) *
@@ -107,30 +115,49 @@ class Planet(object):
             (1.0 / (self.axis ** 6.0))
         )
 
-    def day(self):
-        tidal_locked = False
-        year_in_hours = self.orbital_period() * 24.0
-        angular_velocity = self.base_angular_velocity() + (
+    def angular_velocity(self):
+        """Angular velocity of the planet."""
+        return self.base_angular_velocity() + (
             self.tidal_rotational_deceleration() * self.star.age()
         )
-        if angular_velocity <= 0.0:
-            tidal_locked = True
-        else:
-            day_in_hours = 2 * math.pi / (3600.0 * angular_velocity)
-            if day_in_hours >= year_in_hours:
-                tidal_locked = True
-        if tidal_locked:
-            if self.eccentricity > 0.1:
-                return self.spin_resonance_factor() * year_in_hours
-            else:
-                return year_in_hours
-        return day_in_hours
+
+    def non_locked_day(self):
+        """Length of a day, assuming no tidal locking."""
+        return 2 * math.pi / (3600.0 * self.angular_velocity())
+
+    def tidally_locked(self):
+        """If the planet is tiday locked to it's star."""
+        return (
+            self.angular_velocity() <= 0.0 or
+            self.non_locked_day() >= self.orbit_hours()
+        )
+
+    def orbit_hours(self):
+        """Hours to complete a solar orbit."""
+        return self.orbital_period() * 24.0
+
+    def resonant(self):
+        """If the planet is resonant."""
+        return self.tidally_locked() and self.eccentricity > 0.1
+
+    def day(self):
+        """Returns length of day in Earth days."""
+        if self.resonant():
+            return self.spin_resonance_factor() * self.orbit_hours()
+        elif self.tidally_locked():
+            return self.orbit_hours()
+        return self.non_locked_day()
 
     def resonant_period(self):
         pass
 
     def axial_tilt(self):
-        pass
+        """Returns inclination in degrees."""
+        if self.tilt is None:
+            self.tilt = int(
+                (self.axis ** 0.2) * about(self.earth_axial_tilt, 0.4)
+            ) % 360
+        return self.tilt
 
     def escape_velocity(self):
         pass

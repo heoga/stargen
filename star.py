@@ -34,9 +34,9 @@ class Star(object):
         return min(self.main_sequence_life(), 6.0E9)
 
     def age(self):
-        if self.specified_age is not None:
-            return self.specified_age
-        return random.uniform(1.0E9, self.maximum_star_age())
+        if self.specified_age is None:
+            self.specified_age = random.uniform(1.0E9, self.maximum_star_age())
+        return self.specified_age
 
     def ecosphere_radius(self):
         return math.sqrt(self.luminosity_ratio())

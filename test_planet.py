@@ -70,7 +70,15 @@ def test_resonant_period():
 
 
 def test_axial_tilt():
-    assert Planet(SUN).axial_tilt() is None
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    planet.axis = 1
+    tilts = set()
+    for i in range(0, 100):
+        tilts.add(Planet(SUN).axial_tilt())
+    assert len(tilts) > 0
+    assert min(tilts) > 0
+    assert max(tilts) < 360
 
 
 def test_escape_velocity():
