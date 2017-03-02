@@ -167,7 +167,11 @@ class Planet(object):
         return math.sqrt(2.0 * GRAV_CONSTANT * mass_in_grams / radius_in_cm)
 
     def surface_acceleration(self):
-        pass
+        """Returns in cm/sec^2."""
+        return (
+            GRAV_CONSTANT * (self.mass * self.star.solar_mass_in_grams) /
+            ((self.radius() * CM_PER_KM) ** 2.0)
+        )
 
     def rms_velocity(self):
         pass

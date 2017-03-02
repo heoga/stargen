@@ -90,7 +90,9 @@ def test_escape_velocity():
 
 
 def test_surface_acceleration():
-    assert Planet(SUN).surface_acceleration() is None
+    planet = Planet(SUN)
+    planet.mass = planet.earth_in_solar_masses
+    assert round(planet.surface_acceleration(), 2) == 972.39
 
 
 def test_rms_velocity():
