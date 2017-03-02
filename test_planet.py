@@ -24,9 +24,10 @@ def test_earth_mass():
 def test_regular_density():
     planet = Planet(SUN)
     planet.mass = planet.earth_in_solar_masses
-    assert planet.density() == 5.5
-    planet.mass *= 2.0
-    assert round(planet.density(), 2) == 6.0
+    assert round(planet.density(), 2) == 5.43
+    planet.gas_giant = True
+    planet.mass *= 20
+    assert round(planet.density(), 2) == 1.75
 
 
 def test_gas_giant_density():
@@ -41,7 +42,10 @@ def test_gas_giant_density():
 def test_radius():
     planet = Planet(SUN)
     planet.mass = planet.earth_in_solar_masses
-    assert round(planet.radius(), 2) == 6377.89
+    assert round(planet.radius(), 2) == 6403.97
+    planet.gas_giant = True
+    planet.mass *= 20
+    assert round(planet.radius(), 2) == 25382.72
 
 
 def test_orbital_period():

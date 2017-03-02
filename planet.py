@@ -26,17 +26,50 @@ class Planet(object):
         return self.mass / self.earth_in_solar_masses
 
     def density(self):
-        factor = 1.2 if self.gas_giant else 5.5
-        return factor * (
-            self.earth_mass() ** (1.0 / 8.0)
-        ) * (
-            (self.star.ecosphere_radius() / self.axis) ** (1.0 / 4.0)
+        if self.gas_giant:
+            return 1.2 * (
+                self.earth_mass() ** (1.0 / 8.0)
+            ) * (
+                (self.star.ecosphere_radius() / self.axis) ** (1.0 / 4.0)
+            )
+        mass = self.mass * self.star.solar_mass_in_grams
+        equat_radius = self.radius() * CM_PER_KM
+        volume = (4.0 * math.pi * (equat_radius ** 3.0)) / 3.0
+        return(mass / volume)
+
+    def kothari_radius(self):
+        orbital_zone = self.orbit_zone()
+        if orbital_zone == 1:
+            atomic_weight = 15.0
+            atomic_number = 8.0
+        else:
+            atomic_weight = 10.0
+            atomic_number = 5.0
+        a1_20 = 6.485E12
+        a2_20 = 4.0032E-8
+        beta_20 = 5.71E12
+        temp = atomic_weight * atomic_number
+        temp = (
+            2.0 * beta_20 * (self.star.solar_mass_in_grams ** (1.0 / 3.0))
+        ) / (a1_20 * (temp ** (1.0 / 3.0)))
+        temp2 = a2_20 * (atomic_weight ** (4.0 / 3.0)) * (
+            self.star.solar_mass_in_grams ** (2.0 / 3.0)
         )
+        temp2 = temp2 * (self.mass ** (2.0 / 3.0))
+        temp2 = temp2 / (a1_20 * (atomic_number ** 2))
+        temp2 = 1.0 + temp2
+        temp = temp / temp2
+        temp = (temp * (self.mass ** (1.0 / 3.0))) / CM_PER_KM
+        return temp
 
     def radius(self):
-        grams = self.mass * self.star.solar_mass_in_grams
-        volume = grams / self.density()
-        return (((3.0 / (math.pi * 4.0)) * volume) ** (1.0 / 3.0) / CM_PER_KM)
+        if self.gas_giant:
+            grams = self.mass * self.star.solar_mass_in_grams
+            volume = grams / self.density()
+            return ((
+                (3.0 / (math.pi * 4.0)) * volume
+            ) ** (1.0 / 3.0) / CM_PER_KM)
+        return self.kothari_radius()
 
     def orbital_period(self):
         pass
